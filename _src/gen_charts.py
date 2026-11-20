@@ -2,6 +2,7 @@
 import json, os
 BASE = "https://dwalver.github.io/paceplanner"
 MI = 1.609344
+BEG = {"5k":("Couch to 5K plan","https://www.etsy.com/listing/4621704818"),"10k":("Beginner 10K plan","https://www.etsy.com/listing/4621698735"),"half":("Beginner half plan","https://www.etsy.com/listing/4621699719"),"marathon":("First marathon plan","https://www.etsy.com/listing/4621707532")}
 ETSY = {"5k":"https://www.etsy.com/listing/4621569947","10k":"https://www.etsy.com/listing/4621556280",
         "half":"https://www.etsy.com/listing/4621555304","marathon":"https://www.etsy.com/listing/4621547981",
         "bundle":"https://www.etsy.com/listing/4621577122"}
@@ -95,7 +96,7 @@ def cta(r, up):
     return f"""<section class="card cta">
 <h2>Turn your goal time into a training plan</h2>
 <p>The free PacePlanner generator builds a {r['weeks']}-week {r['name'].lower()} plan from your race date and goal time, with the target pace for every run. Prefer a spreadsheet you keep? The {r['name']} plan on Etsy fills in your dates and paces automatically in Excel or Google Sheets.</p>
-<a class="btn" href="{up}plan/">Build my free {r['name'].lower()} plan</a><a class="btn alt" href="{ETSY[r['key']]}" rel="noopener">{r['name']} spreadsheet plan</a>
+<a class="btn" href="{up}plan/">Build my free {r['name'].lower()} plan</a><a class="btn alt" href="{ETSY[r['key']]}" rel="noopener">{r['name']} spreadsheet plan</a><a class="btn alt" href="{BEG[r['key']][1]}" rel="noopener">{BEG[r['key']][0]}</a>
 </section>"""
 
 def breadcrumb(items):
