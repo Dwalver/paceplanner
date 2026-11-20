@@ -138,7 +138,7 @@ footer a{color:var(--muted)}
 <p class="sub" style="margin-top:12px">Pay what you want, once. No subscription, no account, every future plan included.</p>
 <div id="pro-buy"><a class="btn" id="buy" href="#" target="_blank" rel="noopener">Unlock Pro</a></div>
 <div class="keyrow" style="margin-top:16px">
- <div style="flex:1 1 240px"><label for="k-in">Already unlocked? Paste your licence key</label><input id="k-in" placeholder="e.g. PACEPLANNER-XXXX-XXXX" autocomplete="off"></div>
+ <div style="flex:1 1 240px"><label for="k-in">Already unlocked? Paste your licence key</label><input id="k-in" placeholder="e.g. PACE-XXXXXXXX-XXXX" autocomplete="off"></div>
  <button class="sec" id="k-go">Activate</button>
 </div>
 <div id="k-msg" class="note hide" aria-live="polite"></div>
@@ -159,8 +159,8 @@ footer a{color:var(--muted)}
 <script>
 // ---- Configuration (filled in once the Polar account exists) ----
 const CFG = {
-  checkoutUrl: "",          // Polar checkout link for the Pro unlock
-  polarOrgId: "",           // Polar organization id (public)
+  checkoutUrl: "https://buy.polar.sh/polar_cl_0LXsjlnS0M3zndJ2qWFGYxCahc70jeddCb0ZN0btcgl",          // Polar checkout link for the Pro unlock
+  polarOrgId: "9529c75f-b6d9-4ba4-b60e-3c5f86796307",           // Polar organization id (public)
 };
 // -----------------------------------------------------------------
 const $ = id => document.getElementById(id);
