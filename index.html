@@ -127,6 +127,21 @@ footer{color:var(--muted);font-size:.85rem;text-align:center;padding:24px 16px 4
  <div class="plan"><h3>Marathon · 16 weeks</h3><p>Long runs up to 32 km, marathon-pace work, 3-week taper.</p><a data-plan="marathon" href="#">Get the plan</a></div>
  <div class="plan best"><h3>All 4 plans</h3><p>The whole bundle at a discount. Train for every distance.</p><a data-plan="bundle" href="#">Get the bundle</a></div>
 </div>
+<h3 style="margin:22px 0 4px">New to running?</h3>
+<p class="sub">Gentler plans with 3–4 runs a week, walk breaks allowed.</p>
+<div class="plans">
+ <div class="plan"><h3>Couch to 5K · 9 weeks</h3><p>Run/walk sessions 3 times a week, from 60-second jogs to your first 5K.</p><a data-plan="c25k" href="#">Get the plan</a></div>
+ <div class="plan"><h3>Beginner 10K · 10 weeks</h3><p>From running 5K to racing 10K with 4 runs a week.</p><a data-plan="b10k" href="#">Get the plan</a></div>
+ <div class="plan"><h3>Beginner half · 14 weeks</h3><p>Long runs build gently from 8 to 18 km.</p><a data-plan="bhalf" href="#">Get the plan</a></div>
+ <div class="plan"><h3>First marathon · 20 weeks</h3><p>4 runs a week, long runs up to 30 km, fuelling reminders.</p><a data-plan="fmar" href="#">Get the plan</a></div>
+ <div class="plan best"><h3>All 4 beginner plans</h3><p>Couch to 5K, 10K, half and first marathon in one download.</p><a data-plan="begbundle" href="#">Get the bundle</a></div>
+</div>
+<h3 style="margin:22px 0 4px">Going further</h3>
+<div class="plans">
+ <div class="plan"><h3>50K ultra · 20 weeks</h3><p>Hills, back-to-back weekend runs and long runs up to 40 km.</p><a data-plan="ultra" href="#">Get the plan</a></div>
+ <div class="plan"><h3>Running Log 2027</h3><p>Log every run: pace, weekly and monthly totals, shoe mileage and a yearly goal dashboard.</p><a data-plan="log" href="#">Get the log</a></div>
+ <div class="plan best"><h3>Everything · 10 files</h3><p>All 9 training plans from Couch to 5K to 50K ultra, plus the Running Log 2027.</p><a data-plan="complete" href="#">Get the complete bundle</a></div>
+</div>
 </section>
 
 <section class="card" id="faq">
@@ -143,7 +158,7 @@ footer{color:var(--muted);font-size:.85rem;text-align:center;padding:24px 16px 4
 
 <script>
 // Fill in with real checkout links once the shop is live.
-const PLAN_LINKS = {"5k":"https://www.etsy.com/listing/4621569947", "10k":"https://www.etsy.com/listing/4621556280", "half":"https://www.etsy.com/listing/4621555304", "marathon":"https://www.etsy.com/listing/4621547981", "bundle":"https://www.etsy.com/listing/4621577122"};
+const PLAN_LINKS = {"5k":"https://www.etsy.com/listing/4621569947", "10k":"https://www.etsy.com/listing/4621556280", "half":"https://www.etsy.com/listing/4621555304", "marathon":"https://www.etsy.com/listing/4621547981", "bundle":"https://www.etsy.com/listing/4621577122", "c25k":"https://www.etsy.com/listing/4621704818", "b10k":"https://www.etsy.com/listing/4621698735", "bhalf":"https://www.etsy.com/listing/4621699719", "fmar":"https://www.etsy.com/listing/4621707532", "begbundle":"https://www.etsy.com/listing/4621709420", "ultra":"https://www.etsy.com/listing/4621700989", "log":"https://www.etsy.com/listing/4621708916", "complete":"https://www.etsy.com/listing/4621702561"};
 
 const $ = id => document.getElementById(id);
 const num = v => { const n = parseFloat(String(v).replace(',', '.')); return isNaN(n) ? 0 : n; };
