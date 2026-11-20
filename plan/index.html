@@ -1,0 +1,468 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Free Running Training Plan Generator: 5K, 10K, Half & Marathon | PacePlanner</title>
+<meta name="description" content="Build a free personalised running training plan for 5K, 10K, half marathon or marathon. Pick your race date, goal time, weekly mileage and running days, and get every session with dates and target paces.">
+<link rel="canonical" href="https://dwalver.github.io/paceplanner/plan/">
+<meta property="og:title" content="Free Running Training Plan Generator">
+<meta property="og:description" content="A personalised plan with dates, distances and target paces for every run. Free, no sign-up.">
+<meta property="og:type" content="website">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebApplication","name":"PacePlanner Training Plan Generator","applicationCategory":"SportsApplication","operatingSystem":"Any","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}}
+</script>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[
+{"@type":"Question","name":"How is the training plan built?","acceptedAnswer":{"@type":"Answer","text":"The plan starts from your current weekly distance and builds gradually towards a peak, with an easier week every fourth week. It moves from base running to race-specific workouts and ends with a taper so you arrive fresh on race day. Target paces come from your goal time."}},
+{"@type":"Question","name":"Is the training plan generator free?","acceptedAnswer":{"@type":"Answer","text":"Yes. The full plan with dates, distances and paces is free. A one-time Pro unlock adds calendar export, Excel export, a printable version and progress tracking."}},
+{"@type":"Question","name":"How many weeks do I need to train for a marathon?","acceptedAnswer":{"@type":"Answer","text":"Most runners use 16 to 20 weeks for a marathon, 12 weeks for a half marathon, 10 weeks for a 10K and 8 weeks for a 5K, assuming you can already run comfortably for 30 minutes."}}
+]}
+</script>
+<style>
+:root{--bg:#f6f8fb;--card:#fff;--ink:#1b2733;--muted:#5b6b7b;--brand:#1f3a5f;--accent:#f26b3a;--line:#dde4ec;--soft:#eef3f8;--ok:#2e8b57;--q:#fde9df;--lr:#e3edf9;--race:#fff3c4}
+@media (prefers-color-scheme:dark){:root{--bg:#0f1720;--card:#17212c;--ink:#e6edf3;--muted:#9fb0c0;--brand:#8db4e2;--accent:#ff8a5c;--line:#2a3846;--soft:#1d2a37;--ok:#5cc38a;--q:#3a2a22;--lr:#1d2c40;--race:#3b3418}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
+header{background:var(--brand);color:#fff;padding:28px 16px 36px}
+@media (prefers-color-scheme:dark){header{background:#13263d}}
+.wrap{max-width:960px;margin:0 auto;padding:0 16px}
+header h1{margin:0 0 6px;font-size:clamp(1.6rem,4vw,2.2rem)}
+header p{margin:0;opacity:.9}
+nav{display:flex;gap:14px;flex-wrap:wrap;margin-top:14px;font-size:.95rem}
+nav a{color:#fff;opacity:.9}
+main{margin-top:-18px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:22px;margin:0 0 20px}
+h2{margin:0 0 4px;font-size:1.3rem;color:var(--brand)}
+.sub{color:var(--muted);margin:0 0 16px;font-size:.95rem}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px}
+label{display:block;font-size:.85rem;color:var(--muted);margin-bottom:4px}
+input,select{width:100%;padding:10px 12px;border:1px solid var(--line);border-radius:9px;background:var(--bg);color:var(--ink);font-size:1rem}
+.row{display:flex;gap:6px}
+.row input{text-align:center}
+button,.btn{display:inline-block;background:var(--accent);color:#fff;border:0;border-radius:9px;padding:11px 18px;font-weight:600;font-size:1rem;cursor:pointer;margin-top:14px;text-decoration:none}
+button.sec{background:var(--brand)}
+@media (prefers-color-scheme:dark){button.sec{color:#0f1720}}
+button:disabled{opacity:.5;cursor:not-allowed}
+.note{margin-top:14px;padding:12px 14px;background:var(--soft);border-radius:10px;font-size:.95rem}
+.warn{border-left:4px solid var(--accent)}
+.summary{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin:6px 0 4px}
+.stat{background:var(--soft);border-radius:10px;padding:10px 12px}
+.stat b{display:block;font-size:1.15rem;color:var(--brand)}
+.stat span{font-size:.8rem;color:var(--muted)}
+table{width:100%;border-collapse:collapse;font-size:.93rem}
+th,td{text-align:left;padding:7px 6px;border-bottom:1px solid var(--line);vertical-align:top}
+th{color:var(--muted);font-weight:600;font-size:.82rem}
+.week{margin-top:18px}
+.week h3{margin:0 0 4px;font-size:1.02rem;display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap}
+.week h3 small{color:var(--muted);font-weight:500}
+.tag{display:inline-block;font-size:.72rem;font-weight:700;letter-spacing:.03em;text-transform:uppercase;padding:2px 7px;border-radius:20px;background:var(--soft);color:var(--muted);margin-left:6px;vertical-align:1px}
+tr.q td{background:var(--q)}
+tr.lr td{background:var(--lr)}
+tr.race td{background:var(--race);font-weight:600}
+td.d{white-space:nowrap;color:var(--muted);width:88px}
+td.km{white-space:nowrap;width:70px;font-weight:600}
+td.ck{width:30px}
+td.ck input{width:18px;height:18px;padding:0}
+tr.done td{opacity:.55}
+tr.done td.w{text-decoration:line-through}
+.pace{color:var(--muted);font-size:.85rem}
+.pro{border:2px solid var(--accent)}
+.feat{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;margin:10px 0 4px;padding:0;list-style:none}
+.feat li{background:var(--soft);border-radius:10px;padding:10px 12px;font-size:.93rem}
+.feat b{display:block}
+.keyrow{display:flex;gap:8px;flex-wrap:wrap;align-items:flex-end}
+.keyrow input{flex:1 1 240px}
+.keyrow button{margin-top:0}
+.tools{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px;margin-bottom:14px}
+.tools button{margin-top:0;font-size:.9rem;padding:9px 10px}
+.ok{color:var(--ok);font-weight:600}
+.lock{font-size:.85em}
+details{border-bottom:1px solid var(--line);padding:10px 0}
+summary{cursor:pointer;font-weight:600}
+footer{color:var(--muted);font-size:.85rem;text-align:center;padding:24px 16px 40px}
+footer a{color:var(--muted)}
+.hide{display:none!important}
+@media (max-width:600px){td.d{width:auto}.card{padding:16px}}
+@media print{
+  header,nav,#form,#pro,#faq,footer,.tools,.noprint{display:none!important}
+  body{background:#fff;color:#000;font-size:11px}
+  main{margin:0}.card{border:0;padding:0;margin:0}
+  .week{break-inside:avoid;margin-top:10px}
+  tr.q td,tr.lr td,tr.race td{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+}
+</style>
+</head>
+<body>
+<header><div class="wrap">
+<h1>Running Training Plan Generator</h1>
+<p>A personal plan for 5K, 10K, half marathon or marathon: every run with a date, a distance and a target pace. Free, no sign-up.</p>
+<nav><a href="../">Pace calculator</a><a href="#form">Build a plan</a><a href="#pro">Pro</a><a href="#faq">FAQ</a></nav>
+</div></header>
+<main class="wrap">
+
+<section class="card" id="form">
+<h2>Build your plan</h2>
+<p class="sub">Takes ten seconds. Everything is calculated in your browser and nothing is sent anywhere.</p>
+<div class="grid">
+ <div><label for="f-race">Goal race</label><select id="f-race"><option value="5">5K</option><option value="10">10K</option><option value="21.0975" selected>Half marathon</option><option value="42.195">Marathon</option></select></div>
+ <div><label for="f-date">Race date</label><input id="f-date" type="date"></div>
+ <div><label>Goal time (h : m : s)</label><div class="row"><input id="f-h" inputmode="numeric" value="1" aria-label="hours"><input id="f-m" inputmode="numeric" value="55" aria-label="minutes"><input id="f-s" inputmode="numeric" value="0" aria-label="seconds"></div></div>
+ <div><label for="f-unit">Units</label><select id="f-unit"><option value="km">Kilometres</option><option value="mi">Miles</option></select></div>
+ <div><label for="f-vol">Current weekly distance (<span class="u">km</span>)</label><input id="f-vol" inputmode="decimal" value="25"></div>
+ <div><label for="f-days">Runs per week</label><select id="f-days"><option>3</option><option selected>4</option><option>5</option><option>6</option></select></div>
+ <div><label for="f-long">Long run day</label><select id="f-long"><option value="6">Sunday</option><option value="5">Saturday</option></select></div>
+</div>
+<button id="f-go">Build my plan</button>
+</section>
+
+<section class="card hide" id="out">
+<div class="tools noprint" id="tools">
+ <button class="sec" data-pro="ics">📅 Add to calendar <span class="lock">🔒</span></button>
+ <button class="sec" data-pro="xlsx">📊 Download Excel <span class="lock">🔒</span></button>
+ <button class="sec" data-pro="print">🖨️ Print / PDF <span class="lock">🔒</span></button>
+ <button class="sec" data-pro="track">✅ Track progress <span class="lock">🔒</span></button>
+</div>
+<div id="plan"></div>
+</section>
+
+<section class="card pro" id="pro">
+<h2>PacePlanner Pro</h2>
+<p class="sub">The plan above is free, forever. If it helps you, a one-time Pro unlock keeps this site running and adds:</p>
+<ul class="feat">
+ <li><b>📅 Calendar export</b>Every run in Google, Apple or Outlook calendar, with paces in the description.</li>
+ <li><b>📊 Excel download</b>The whole plan as a spreadsheet you can edit and share.</li>
+ <li><b>🖨️ Printable plan</b>A clean one-page-per-block layout for the fridge, or save as PDF.</li>
+ <li><b>✅ Progress tracking</b>Tick off sessions and see how much of the plan you have done.</li>
+</ul>
+<p class="sub" style="margin-top:12px">Pay what you want, once. No subscription, no account, every future plan included.</p>
+<div id="pro-buy"><a class="btn" id="buy" href="#" target="_blank" rel="noopener">Unlock Pro</a></div>
+<div class="keyrow" style="margin-top:16px">
+ <div style="flex:1 1 240px"><label for="k-in">Already unlocked? Paste your licence key</label><input id="k-in" placeholder="e.g. PACEPLANNER-XXXX-XXXX" autocomplete="off"></div>
+ <button class="sec" id="k-go">Activate</button>
+</div>
+<div id="k-msg" class="note hide" aria-live="polite"></div>
+</section>
+
+<section class="card" id="faq">
+<h2>FAQ</h2>
+<details><summary>How is the plan built?</summary><p>It starts at your current weekly distance and builds gradually to a peak suited to your race and number of running days, with an easier week every fourth week. The first block is base running with hills and fartlek, then come race-specific intervals, tempo runs and longer long runs, and the last one to three weeks are a taper so you arrive fresh.</p></details>
+<details><summary>Where do the target paces come from?</summary><p>From your goal time, using the Riegel formula to estimate your equivalent 5K, 10K, half and marathon performance. Easy and long runs are deliberately slow. If the workouts feel far too hard, your goal is probably ambitious: try a slower goal time and rebuild the plan.</p></details>
+<details><summary>How many weeks do I need?</summary><p>Typically 8 weeks for a 5K, 10 for a 10K, 12 for a half marathon and 16 to 20 for a marathon, assuming you can already run 30 minutes comfortably. If your race is further away, the plan starts later and tells you what to do until then. If it is very close, the plan is compressed and warns you.</p></details>
+<details><summary>What do I = interval, T = threshold and so on mean?</summary><p><b>Easy</b>: conversational. <b>T (threshold)</b>: comfortably hard, roughly the pace you could race for an hour. <b>I (interval)</b>: hard, around 3K–5K race effort. <b>R (repetition)</b>: fast and relaxed, with full recovery. <b>HMP / MP</b>: half-marathon and marathon goal pace. Every hard session includes about 2 km easy warm-up and cool-down.</p></details>
+<details><summary>What does Pro cost and what happens to my data?</summary><p>Pro is a one-time payment where you choose the amount. Payment is handled by Polar, which acts as the seller and handles tax. Your plan and progress are stored only in your own browser.</p></details>
+<details><summary>Is this medical advice?</summary><p>No. Increase training gradually, listen to your body and see a doctor if you have health concerns or pain that does not go away.</p></details>
+</section>
+</main>
+<footer>© <span id="yr"></span> PacePlanner · <a href="../">Pace calculator</a> · Plans are guidance, not medical advice.</footer>
+
+<script>
+// ---- Configuration (filled in once the Polar account exists) ----
+const CFG = {
+  checkoutUrl: "",          // Polar checkout link for the Pro unlock
+  polarOrgId: "",           // Polar organization id (public)
+};
+// -----------------------------------------------------------------
+const $ = id => document.getElementById(id);
+const num = v => { const n = parseFloat(String(v).replace(',', '.')); return isNaN(n) ? 0 : n; };
+const KM_PER_MI = 1.609344;
+const DAY = 864e5;
+const DOW = ["Mon","Tue","Wed","Thu","Fri","Sat","Sun"];
+const RACE_NAME = {5:"5K",10:"10K",21.0975:"Half marathon",42.195:"Marathon"};
+const store = {get(k){try{return JSON.parse(localStorage.getItem(k))}catch(e){return null}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
+$('yr').textContent = new Date().getFullYear();
+
+function fmt(sec, forceH){ sec=Math.round(sec); const h=Math.floor(sec/3600), m=Math.floor(sec%3600/60), s=sec%60;
+  return (h||forceH)?`${h}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`:`${m}:${String(s).padStart(2,'0')}`; }
+const riegel = (t,d1,d2) => t*Math.pow(d2/d1,1.06);
+const iso = d => `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+const parseDate = s => { const [y,m,d]=s.split('-').map(Number); return new Date(y,m-1,d); };
+const monday = d => { const x=new Date(d.getFullYear(),d.getMonth(),d.getDate()); x.setDate(x.getDate()-((x.getDay()+6)%7)); return x; };
+const addDays = (d,n) => { const x=new Date(d); x.setDate(x.getDate()+n); return x; };
+const dayIdx = d => (d.getDay()+6)%7;
+const nice = d => d.toLocaleDateString('en-GB',{day:'numeric',month:'short'});
+
+// ---------- Plan engine ----------
+const RACE = {
+  5:       {rec:8,  min:4, max:12, taper:1, peak:40, longCap:14, longMin:6, longGoal:11},
+  10:      {rec:10, min:5, max:14, taper:1, peak:50, longCap:18, longMin:7, longGoal:15},
+  21.0975: {rec:12, min:6, max:16, taper:2, peak:55, longCap:21, longMin:8, longGoal:18},
+  42.195:  {rec:16, min:8, max:20, taper:3, peak:68, longCap:32, longMin:10, longGoal:30},
+};
+const DAYS_FACTOR = {3:.65,4:.8,5:1,6:1.15};
+const LONG_SHARE = {3:.4,4:.34,5:.3,6:.27};
+function slots(days,long){
+  const base = {3:[1,3,6],4:[1,2,4,6],5:[1,2,3,5,6],6:[0,1,2,3,5,6]}[days].slice();
+  if (long===5){ if(days===3) return {set:[1,3,5],long:5}; if(days===4) return {set:[1,2,4,5],long:5}; return {set:base,long:5}; }
+  return {set:base,long:6};
+}
+// Workout templates: [title, total km, work description, pace key]
+const T = {
+  base: [["Hill repeats",7,"8 × 60 s uphill at hard effort, jog down. Plus 2 km warm-up and cool-down.","I"],
+         ["Fartlek",8,"8 × 1 min fast / 1 min easy, continuous. Plus warm-up and cool-down.","I"],
+         ["Hill repeats",8,"10 × 45 s uphill hard, jog down.","I"],
+         ["Fartlek",8,"6 × 2 min fast / 1 min easy.","I"]],
+  speed: [["Intervals",8,"5 × 1000 m @ I, 2 min jog recovery.","I"],
+          ["Intervals",8,"6 × 800 m @ I, 90 s jog.","I"],
+          ["Repetitions",7.5,"10 × 400 m @ R, 400 m jog.","R"],
+          ["Intervals",9,"4 × 1200 m @ I, 2–3 min jog.","I"]],
+  thresh:[["Threshold",8,"3 × 10 min @ T, 2 min jog.","T"],
+          ["Tempo run",8,"20 min continuous @ T.","T"],
+          ["Threshold",9,"2 × 15 min @ T, 3 min jog.","T"],
+          ["Threshold",10,"4 × 8 min @ T, 90 s jog.","T"]],
+  peak5: [["Race-pace intervals",8,"6 × 800 m @ 5K pace, 2 min jog.","5K"],
+          ["Repetitions",7.5,"3 × (4 × 400 m @ R, 200 m jog), 3 min between sets.","R"],
+          ["Race-pace intervals",9,"5 × 1000 m @ 5K pace, 2 min jog.","5K"]],
+  peak10:[["Race-pace intervals",10,"4 × 2 km @ 10K pace, 2 min jog.","10K"],
+          ["Threshold",10,"3 × 3 km @ T, 2 min jog.","T"],
+          ["Race-pace intervals",9,"6 × 1 km @ 10K pace, 75 s jog.","10K"]],
+  peakH: [["Half-marathon pace",12,"3 × 3 km @ HMP, 2 min jog.","HMP"],
+          ["Half-marathon pace",14,"2 × 5 km @ HMP, 3 min jog.","HMP"],
+          ["Threshold",11,"5 × 1.5 km @ T, 90 s jog.","T"]],
+  peakM: [["Threshold",11,"2 × 20 min @ T, 3 min jog.","T"],
+          ["Threshold",12,"5 × 2 km @ T, 2 min jog.","T"],
+          ["Marathon pace",14,"10 km @ MP in the middle of the run.","MP"]],
+};
+function paces(goal, dist){
+  const p5 = riegel(goal,dist,5)/5;
+  return { E:[p5*1.25,p5*1.38], L:[p5*1.22,p5*1.32], MP:[riegel(goal,dist,42.195)/42.195], HMP:[riegel(goal,dist,21.0975)/21.0975],
+    "10K":[riegel(goal,dist,10)/10], "5K":[p5], T:[p5*1.06,p5*1.09], I:[p5*.98,p5*1.02], R:[p5*.93,p5*.97], RACE:[goal/dist] };
+}
+function buildPlan(o){
+  const R = RACE[o.race], today = new Date(); today.setHours(0,0,0,0);
+  const raceDate = parseDate(o.date), raceMon = monday(raceDate);
+  const avail = Math.floor((raceMon - monday(today))/DAY/7 + .5) + 1;
+  const warnings = [];
+  if (raceDate < today) return {error:"Pick a race date in the future."};
+  let N = Math.min(avail, R.max);
+  if (avail < R.min) warnings.push(`Only ${avail} week${avail>1?'s':''} until race day. ${R.rec} weeks is ideal for a ${RACE_NAME[o.race]}, so this plan is compressed: be conservative with your goal.`);
+  N = Math.max(1, N);
+  const start = addDays(raceMon, -7*(N-1));
+  if (avail > R.max) warnings.push(`Your race is ${avail} weeks away, so the plan starts on ${nice(start)}. Until then, keep running easily around ${fmtDist(o.vol, o.unit)} per week.`);
+  const taper = Math.min(R.taper, Math.max(1, N-1)), M = N - taper;
+  const peakW = M>=3 ? Math.max(1, Math.round(M*.25)) : 0, buildW = M>=2 ? Math.max(1, Math.round(M*.35)) : 0, baseW = Math.max(0, M - peakW - buildW);
+  const startVol = Math.max(10, o.vol);
+  const target = R.peak * DAYS_FACTOR[o.days];
+  const peakVol = Math.min(Math.max(target, startVol*1.1), startVol*1.7);
+  if (o.race===42.195 && startVol < 25) warnings.push("You are starting from low weekly distance for a marathon. Consider a half marathon first, or allow more weeks.");
+  if (o.race===21.0975 && startVol < 12) warnings.push("You are starting from low weekly distance for a half marathon. Be patient with the build-up.");
+  const P = paces(o.goal, o.race), sl = slots(o.days, o.long);
+  const peakSet = o.race==5?T.peak5:o.race==10?T.peak10:o.race==21.0975?T.peakH:T.peakM;
+  const buildSet = o.race<=10 ? T.speed : T.thresh, q2Set = o.race<=10 ? T.thresh : T.speed;
+  const taperMult = {1:[.6],2:[.75,.55],3:[.8,.65,.45]}[taper];
+  const weeks = [];
+  for (let w=0; w<N; w++){
+    const ws = addDays(start, 7*w);
+    let phase, vol, k;
+    if (w < baseW){ phase="Base"; k=w; }
+    else if (w < baseW+buildW){ phase="Build"; k=w-baseW; }
+    else if (w < M){ phase="Peak"; k=w-baseW-buildW; }
+    else { phase = w===N-1 ? "Race week" : "Taper"; k=w-M; }
+    const ramp = baseW+buildW>0 ? Math.min(1, w/Math.max(1, baseW+buildW)) : 1;
+    vol = w < M ? startVol + (peakVol-startVol)*ramp : peakVol*taperMult[k];
+    const cut = w < M && w%4===3 && w!==M-1;
+    if (cut) vol *= .8;
+    const sess = [];
+    const raceWeek = w===N-1;
+    // quality sessions
+    let q1=null, q2=null;
+    if (raceWeek){ q1 = ["Sharpener", o.race>=21?8:6, `${o.race>=21?4:3} × 1 km @ goal race pace, 2 min jog. Keep it controlled.`, "RACE"]; }
+    else if (phase==="Base") q1 = T.base[k%T.base.length];
+    else if (phase==="Build") q1 = buildSet[k%buildSet.length];
+    else if (phase==="Peak") q1 = peakSet[k%peakSet.length];
+    else { const t0 = (o.race<=10 ? peakSet : T.thresh)[0]; q1 = [t0[0]+" (short)", Math.round(t0[1]*.75), t0[2].replace(/^(\d+)/, n=>Math.max(2,Math.round(n*.6))), t0[3]]; }
+    if (o.days>=5 && !raceWeek && (phase==="Build"||phase==="Peak") && !cut) q2 = q2Set[(k+1)%q2Set.length];
+    if (cut && q1) q1 = [q1[0], Math.round(q1[1]*.85), q1[2]+" Easier week: stop a rep early if needed.", q1[3]];
+    const scale = x => Math.min(x, Math.max(5, vol*.38));
+    // long run
+    const share = LONG_SHARE[o.days] + (o.race===42.195?.04:0);
+    const longTarget = Math.min(R.longCap, R.longGoal * Math.min(1, .6 + .4*startVol/40)), longStart = startVol*share;
+    const longPeak = Math.min(R.longCap, Math.max(peakVol*share, longTarget));
+    let lrKm;
+    if (w < M) { lrKm = Math.max(vol*share, longStart + (longTarget-longStart)*ramp); if (cut) lrKm *= .8; }
+    else { const r = N-1-w; lrKm = longPeak * (r>=2 ? .8 : .62); }
+    lrKm = Math.min(R.longCap, Math.max(R.longMin, lrKm));
+    let lrDesc = "Easy, steady effort.", lrPace = "L";
+    if (o.race===42.195 && (phase==="Peak" || (phase==="Build" && k%2===1))) { const mp = Math.min(16, Math.round(lrKm*.4)); lrDesc = `Easy, with the last ${mp} km @ MP.`; }
+    else if (o.race===21.0975 && (phase==="Peak" || (phase==="Build" && k%2===1))) { const hp = Math.min(6, Math.round(lrKm*.25)); lrDesc = `Easy, with the last ${hp} km @ HMP.`; }
+    else if (o.race<=10 && phase==="Peak") lrDesc = "Easy, finishing the last 2 km a little quicker (around T).";
+    // assemble per day
+    const set = sl.set.slice(), longDay = sl.long, qDays = [1, 3];
+    const raceDow = dayIdx(raceDate);
+    let qUsed = 0;
+    for (const d of set){
+      const date = addDays(ws, d);
+      if (raceWeek && date > raceDate) continue;
+      if (raceWeek && d === raceDow) continue;
+      if (raceWeek && d === longDay) continue;
+      if (d === longDay){ sess.push({d, date, type:"long", title:"Long run", km:lrKm, desc:lrDesc, pace:lrPace}); continue; }
+      if (q1 && d===qDays[0] && !(raceWeek && raceDow - d < 2)){ sess.push({d,date,type:"q",title:q1[0],km:scale(q1[1]),desc:q1[2],pace:q1[3]}); qUsed++; continue; }
+      if (q2 && d===qDays[1]){ sess.push({d,date,type:"q",title:q2[0],km:scale(q2[1]),desc:q2[2],pace:q2[3]}); qUsed++; continue; }
+      sess.push({d,date,type:"easy",title:"Easy run",km:0,desc:"Conversational effort.",pace:"E"});
+    }
+    if (raceWeek){
+      // drop sessions the day before race, add shakeout
+      for (let i=sess.length-1;i>=0;i--) if (raceDow - sess[i].d === 1) sess.splice(i,1);
+      if (raceDow>0) sess.push({d:raceDow-1, date:addDays(raceDate,-1), type:"easy", title:"Shakeout", km:3, desc:"Rest, or 15–20 min very easy plus 4 × 20 s strides.", pace:"E"});
+      sess.push({d:raceDow, date:raceDate, type:"race", title:`Race day: ${RACE_NAME[o.race]}`, km:o.race, desc:`Goal ${fmt(o.goal, true)}. Start a touch slower than goal pace and build.`, pace:"RACE"});
+    }
+    // distribute easy volume
+    const fixed = sess.filter(s=>s.type!=="easy" || s.km).reduce((a,s)=>a+s.km,0);
+    const easy = sess.filter(s=>s.type==="easy" && !s.km);
+    const minEasy = raceWeek ? 3 : Math.max(4, Math.min(6, vol*.12));
+    const per = easy.length ? Math.max(minEasy, (vol - (raceWeek? fixed - o.race : fixed))/easy.length) : 0;
+    const cap = Math.max(minEasy, lrKm*.75);
+    easy.forEach((s,i) => { s.km = Math.min(per, cap); if (raceWeek) s.km = Math.min(s.km, o.race>=21?8:6); });
+    // strides on one easy run per week (not base week 1 of very low volume)
+    const st = easy.find(s=>s.title==="Easy run");
+    if (st && !raceWeek && phase!=="Taper") st.desc = "Conversational effort, then 6 × 20 s relaxed strides.";
+    sess.sort((a,b)=>a.date-b.date);
+    const total = sess.reduce((a,s)=>a+s.km,0);
+    weeks.push({n:w+1, start:ws, phase, cut, sess, total});
+  }
+  return {weeks, warnings, paces:P, o, start, N, peak:Math.max(...weeks.map(w=>w.total)), longest:Math.max(...weeks.flatMap(w=>w.sess.filter(s=>s.type==="long").map(s=>s.km)),0)};
+}
+
+// ---------- Rendering ----------
+function fmtDist(km, unit){ const v = unit==="mi" ? km/KM_PER_MI : km; const r = v>=10 ? Math.round(v) : Math.round(v*2)/2; return `${r} ${unit}`; }
+function paceStr(P, key, unit, bare){ const f = unit==="mi"?KM_PER_MI:1, arr = P[key]; if(!arr) return ""; const a=fmt(arr[0]*f), b=arr[1]?fmt(arr[1]*f):a; return (a===b?a:`${a}–${b}`)+(bare?"":` /${unit}`); }
+const PACE_LABEL = {E:"Easy",L:"Long",T:"T",I:"I",R:"R",MP:"MP",HMP:"HMP","5K":"5K pace","10K":"10K pace",RACE:"Goal pace"};
+function unitText(s, unit){ if (unit!=="mi") return s; return s.replace(/(\d+(?:\.\d+)?)\s?km\b/g,(m,n)=>`${Math.round(n/KM_PER_MI*2)/2} mi`); }
+let PLAN = null, PRO = false;
+function planKey(o){ return "pp-done-"+[o.race,o.date,o.goal,o.vol,o.days,o.long].join("|"); }
+function render(){
+  const p = PLAN, o = p.o, u = o.unit, done = store.get(planKey(o)) || {};
+  const allS = p.weeks.flatMap(w=>w.sess), nDone = allS.filter(s=>done[iso(s.date)+s.title]).length;
+  let h = `<h2>Your ${p.N}-week ${RACE_NAME[o.race].toLowerCase()} plan</h2>
+  <p class="sub">${nice(p.start)} to race day ${parseDate(o.date).toLocaleDateString('en-GB',{weekday:'short',day:'numeric',month:'short',year:'numeric'})} · goal ${fmt(o.goal,true)} (${paceStr(p.paces,"RACE",u)})</p>`;
+  h += p.warnings.map(w=>`<div class="note warn">${w}</div>`).join("");
+  h += `<div class="summary">
+   <div class="stat"><b>${p.N} weeks</b><span>${o.days} runs per week</span></div>
+   <div class="stat"><b>${fmtDist(p.peak,u)}</b><span>peak week</span></div>
+   <div class="stat"><b>${fmtDist(p.longest,u)}</b><span>longest run</span></div>
+   ${PRO && trackOn() ? `<div class="stat"><b>${nDone} / ${allS.length}</b><span>sessions done</span></div>` : ""}
+  </div>`;
+  h += `<table style="margin-top:10px"><tr><th>Pace</th><th>Per ${u}</th><th>Pace</th><th>Per ${u}</th></tr>`;
+  const keys = ["E","T","L","I", o.race>=21?"HMP":"5K", "R", o.race===42.195?"MP":"10K", "RACE"];
+  for (let i=0;i<keys.length;i+=2) h += `<tr><td>${PACE_LABEL[keys[i]]}</td><td><b>${paceStr(p.paces,keys[i],u,1)}</b></td><td>${PACE_LABEL[keys[i+1]]}</td><td><b>${paceStr(p.paces,keys[i+1],u,1)}</b></td></tr>`;
+  h += `</table>`;
+  for (const w of p.weeks){
+    h += `<div class="week"><h3><span>Week ${w.n} <span class="tag">${w.phase}${w.cut?" · easier":""}</span></span><small>${nice(w.start)} · ${fmtDist(w.total,u)}</small></h3><table>`;
+    for (const s of w.sess){
+      const id = iso(s.date)+s.title, isDone = !!done[id];
+      h += `<tr class="${s.type==='q'?'q':s.type==='long'?'lr':s.type==='race'?'race':''}${isDone?' done':''}">` +
+        (PRO && trackOn() ? `<td class="ck"><input type="checkbox" data-id="${id}" ${isDone?'checked':''} aria-label="done"></td>` : "") +
+        `<td class="d">${DOW[dayIdx(s.date)]} ${nice(s.date)}</td><td class="w"><b>${s.title}</b><br><span class="pace">${unitText(s.desc,u)} ${s.pace?`Pace: ${paceStr(p.paces,s.pace,u)}`:""}</span></td><td class="km">${fmtDist(s.km,u)}</td></tr>`;
+    }
+    h += `</table></div>`;
+  }
+  $('plan').innerHTML = h;
+  $('out').classList.remove('hide');
+  $('plan').querySelectorAll('input[type=checkbox]').forEach(cb => cb.addEventListener('change', e => {
+    const d = store.get(planKey(o)) || {}; if (e.target.checked) d[e.target.dataset.id]=1; else delete d[e.target.dataset.id];
+    store.set(planKey(o), d); render();
+  }));
+}
+function readForm(){
+  return { race:num($('f-race').value), date:$('f-date').value, goal:num($('f-h').value)*3600+num($('f-m').value)*60+num($('f-s').value),
+    unit:$('f-unit').value, vol:num($('f-vol').value)*($('f-unit').value==="mi"?KM_PER_MI:1), days:+$('f-days').value, long:+$('f-long').value };
+}
+function go(scroll){
+  const o = readForm();
+  if (!o.date){ alertBox("Pick your race date."); return; }
+  if (!o.goal){ alertBox("Enter a goal time."); return; }
+  const pace = o.goal/o.race;
+  if (pace < 150 || pace > 720){ alertBox("That goal time looks unusual for this distance. Please check hours, minutes and seconds."); return; }
+  const p = buildPlan(o);
+  if (p.error){ alertBox(p.error); return; }
+  PLAN = p; store.set("pp-form", {...o, vol:$('f-vol').value}); render();
+  if (scroll) $('out').scrollIntoView({behavior:"smooth"});
+}
+function alertBox(msg){ $('plan').innerHTML = `<div class="note warn">${msg}</div>`; $('out').classList.remove('hide'); }
+$('f-go').addEventListener('click', () => go(true));
+$('f-unit').addEventListener('change', e => document.querySelectorAll('.u').forEach(x=>x.textContent=e.target.value));
+const DEF = {5:[0,25,0],10:[0,52,0],21.0975:[1,55,0],42.195:[4,0,0]}, DEFW = {5:8,10:10,21.0975:12,42.195:16};
+$('f-race').addEventListener('change', e => { const v=num(e.target.value), d=DEF[v]; $('f-h').value=d[0]; $('f-m').value=d[1]; $('f-s').value=d[2];
+  if (!store.get("pp-form")) $('f-date').value = iso(nextSunday(DEFW[v])); });
+function nextSunday(weeks){ const t=new Date(); t.setHours(0,0,0,0); return addDays(monday(t), 7*(weeks-1)+6); }
+(function init(){
+  const f = store.get("pp-form");
+  if (f){ $('f-race').value=String(f.race); $('f-date').value=f.date; $('f-h').value=Math.floor(f.goal/3600); $('f-m').value=Math.floor(f.goal%3600/60); $('f-s').value=Math.round(f.goal%60);
+    $('f-unit').value=f.unit; $('f-vol').value=f.vol; $('f-days').value=String(f.days); $('f-long').value=String(f.long);
+    document.querySelectorAll('.u').forEach(x=>x.textContent=f.unit); }
+  else $('f-date').value = iso(nextSunday(12));
+  const qs = new URLSearchParams(location.search); if (qs.get("race") && RACE[qs.get("race")]) { $('f-race').value = qs.get("race"); $('f-race').dispatchEvent(new Event('change')); }
+})();
+
+// ---------- Pro: licence ----------
+const LIC_KEY = "pp-licence";
+function trackOn(){ return store.get("pp-track") !== false; }
+function setPro(on){
+  PRO = on;
+  document.querySelectorAll('.lock').forEach(l => l.classList.toggle('hide', on));
+  $('pro-buy').classList.toggle('hide', on);
+  if (on){ const L = store.get(LIC_KEY); showMsg(`<span class="ok">Pro is unlocked on this device.</span> Thank you for supporting PacePlanner! <a href="#" id="k-out">Remove key</a>`);
+    $('k-out').addEventListener('click', e => { e.preventDefault(); localStorage.removeItem(LIC_KEY); setPro(false); $('k-msg').classList.add('hide'); }); }
+  if (PLAN) render();
+}
+function showMsg(h){ $('k-msg').innerHTML = h; $('k-msg').classList.remove('hide'); }
+async function validate(key){
+  if (!CFG.polarOrgId) throw new Error("Pro unlock is launching shortly.");
+  const r = await fetch("https://api.polar.sh/v1/customer-portal/license-keys/validate", {method:"POST", headers:{"content-type":"application/json"}, body:JSON.stringify({key, organization_id:CFG.polarOrgId})});
+  if (r.status===404 || r.status===422) return false;
+  if (!r.ok) throw new Error("Could not reach the licence server. Try again in a minute.");
+  const j = await r.json();
+  return j.status === "granted" && (!j.expires_at || new Date(j.expires_at) > new Date());
+}
+$('k-go').addEventListener('click', async () => {
+  const key = $('k-in').value.trim(); if (!key){ showMsg("Paste the licence key from your receipt e-mail."); return; }
+  $('k-go').disabled = true; showMsg("Checking…");
+  try { if (await validate(key)) { store.set(LIC_KEY, {key, checked:Date.now()}); $('k-in').value=""; setPro(true); }
+        else showMsg("That key was not recognised. Copy it exactly from your receipt e-mail, or reply to the receipt for help."); }
+  catch(e){ showMsg(e.message); }
+  $('k-go').disabled = false;
+});
+(async function initPro(){
+  if (CFG.checkoutUrl) $('buy').href = CFG.checkoutUrl; else { $('buy').textContent = "Pro unlock launching soon"; $('buy').removeAttribute('href'); $('buy').style.opacity=.6; }
+  const L = store.get(LIC_KEY);
+  if (L && L.key){ setPro(true);
+    if (Date.now() - (L.checked||0) > 14*DAY){ try { const ok = await validate(L.key); if (ok) store.set(LIC_KEY,{key:L.key,checked:Date.now()}); else { localStorage.removeItem(LIC_KEY); setPro(false); } } catch(e){} } }
+  else setPro(false);
+  if (store.get("pp-form")) go(false);
+})();
+
+// ---------- Pro features ----------
+document.querySelectorAll('[data-pro]').forEach(b => b.addEventListener('click', () => {
+  if (!PLAN) return;
+  if (!PRO){ $('pro').scrollIntoView({behavior:"smooth"}); $('pro').animate([{boxShadow:"0 0 0 0 var(--accent)"},{boxShadow:"0 0 0 8px transparent"}],{duration:900}); return; }
+  ({ics:exportIcs, xlsx:exportXlsx, print:()=>window.print(), track:()=>{ store.set("pp-track", !trackOn()); render(); }})[b.dataset.pro]();
+}));
+function rows(){ const u = PLAN.o.unit; return PLAN.weeks.flatMap(w => w.sess.map(s => ({week:w.n, phase:w.phase, date:s.date, day:DOW[dayIdx(s.date)], title:s.title, dist:fmtDist(s.km,u), desc:unitText(s.desc,u), pace:s.pace?paceStr(PLAN.paces,s.pace,u):""}))); }
+function download(name, blob){ const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=name; document.body.appendChild(a); a.click(); setTimeout(()=>{URL.revokeObjectURL(a.href); a.remove();},500); }
+function fileBase(){ return `PacePlanner-${RACE_NAME[PLAN.o.race].replace(/ /g,'-')}-${PLAN.o.date}`; }
+function exportIcs(){
+  const esc = s => s.replace(/\\/g,"\\\\").replace(/[,;]/g,m=>"\\"+m).replace(/\n/g,"\\n");
+  const d8 = d => iso(d).replace(/-/g,""), stamp = new Date().toISOString().replace(/[-:]/g,"").replace(/\.\d+/,"");
+  const fold = l => { const out=[]; while (l.length>74){ out.push(l.slice(0,74)); l=" "+l.slice(74);} out.push(l); return out.join("\r\n"); };
+  const lines = ["BEGIN:VCALENDAR","VERSION:2.0","PRODID:-//PacePlanner//Training Plan//EN","CALSCALE:GREGORIAN",`X-WR-CALNAME:${RACE_NAME[PLAN.o.race]} training plan`];
+  rows().forEach((r,i) => lines.push("BEGIN:VEVENT", `UID:${d8(r.date)}-${i}-${PLAN.o.date}@paceplanner`, `DTSTAMP:${stamp}`, `DTSTART;VALUE=DATE:${d8(r.date)}`, `DTEND;VALUE=DATE:${d8(addDays(r.date,1))}`,
+    fold(`SUMMARY:${esc(`🏃 ${r.title} · ${r.dist}`)}`), fold(`DESCRIPTION:${esc(`${r.desc}${r.pace?`\nPace: ${r.pace}`:""}\n\nWeek ${r.week} (${r.phase}) · PacePlanner`)}`), "TRANSP:TRANSPARENT", "END:VEVENT"));
+  lines.push("END:VCALENDAR");
+  download(fileBase()+".ics", new Blob([lines.join("\r\n")], {type:"text/calendar"}));
+}
+function exportXlsx(){
+  const run = () => {
+    const data = [["Week","Phase","Date","Day","Session","Distance","Details","Target pace","Done"]].concat(rows().map(r=>[r.week,r.phase,iso(r.date),r.day,r.title,r.dist,r.desc,r.pace,""]));
+    const ws = XLSX.utils.aoa_to_sheet(data); ws["!cols"]=[{wch:6},{wch:10},{wch:11},{wch:5},{wch:26},{wch:9},{wch:60},{wch:16},{wch:6}];
+    const wb = XLSX.utils.book_new(); XLSX.utils.book_append_sheet(wb, ws, "Plan"); XLSX.writeFile(wb, fileBase()+".xlsx");
+  };
+  if (window.XLSX) return run();
+  const s = document.createElement('script'); s.src = "https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"; s.onload = run;
+  s.onerror = () => { // CSV fallback
+    const csv = "﻿" + [["Week","Phase","Date","Day","Session","Distance","Details","Target pace"]].concat(rows().map(r=>[r.week,r.phase,iso(r.date),r.day,r.title,r.dist,r.desc,r.pace])).map(a=>a.map(v=>`"${String(v).replace(/"/g,'""')}"`).join(";")).join("\r\n");
+    download(fileBase()+".csv", new Blob([csv],{type:"text/csv"})); };
+  document.head.appendChild(s);
+}
+</script>
+</body>
+</html>

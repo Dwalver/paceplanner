@@ -65,11 +65,16 @@ footer{color:var(--muted);font-size:.85rem;text-align:center;padding:24px 16px 4
 <header><div class="wrap">
 <h1>Running Pace Calculator</h1>
 <p>Pace per km or mile, race time predictions and your personal training paces. Free, no sign-up.</p>
-<nav><a href="#pace">Pace</a><a href="#predict">Race predictor</a><a href="#zones">Training paces</a><a href="#plans">Training plans</a><a href="#faq">FAQ</a></nav>
+<nav><a href="plan/"><b>Free plan generator</b></a><a href="#pace">Pace</a><a href="#predict">Race predictor</a><a href="#zones">Training paces</a><a href="#plans">Training plans</a><a href="#faq">FAQ</a></nav>
 </div></header>
 
 <main class="wrap">
 
+<section class="card cta" id="generator">
+<h2>New: free training plan generator</h2>
+<p class="sub">Tell it your race, race date, goal time and how much you run now. You get a personal week-by-week plan with every session dated and paced. Free, no sign-up.</p>
+<a href="plan/" style="display:inline-block;background:var(--accent);color:#fff;text-decoration:none;padding:11px 18px;border-radius:9px;font-weight:600">Build my free plan →</a>
+</section>
 <section class="card" id="pace">
 <h2>Pace calculator</h2>
 <p class="sub">Fill in any two of distance, time and pace. Leave the one you want calculated empty.</p>
@@ -198,7 +203,7 @@ $('z-go').addEventListener('click', () => {
   const link = PLAN_LINKS[PLAN_FOR[d]];
   $('z-cta').style.display = 'block';
   $('z-cta').innerHTML = `Want every session laid out with these paces and real dates? The <b>${PLAN_NAME[d]}</b> spreadsheet does it automatically. ` +
-    (link ? `<a href="${link}" target="_blank" rel="noopener">Get it here →</a>` : `<a href="#plans">See the plans →</a>`);
+    (link ? `<a href="${link}" target="_blank" rel="noopener">Get it here →</a>` : `<a href="#plans">See the plans →</a>`) + ` Or <a href="plan/?race=${d}">build a free personalised plan</a>.`;
 });
 </script>
 </body>
