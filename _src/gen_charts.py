@@ -58,7 +58,7 @@ def page(path, title, desc, h1, lead, body, jsonld, img=None):
     depth = path.count("/")
     up = "../" * depth
     nav = (f'<nav><a href="{up}">Pace calculator</a><a href="{up}plan/"><b>Free plan generator</b></a>'
-           f'<a href="{up}pace-chart/">Pace charts</a>'
+           f'<a href="{up}pace-chart/">Pace charts</a><a href="{up}guides/">Guides</a>'
            + "".join(f'<a href="{up}pace-chart/{r["slug"]}/">{r["name"]}</a>' for r in RACES) + "</nav>")
     ld = "".join(f'<script type="application/ld+json">{json.dumps(j, ensure_ascii=False)}</script>\n' for j in jsonld)
     return f"""<!doctype html>
@@ -166,6 +166,25 @@ html = page("pace-chart/", "Running Pace Chart: min/km to min/mile with 5K–Mar
             body, [{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":q,"acceptedAnswer":{"@type":"Answer","text":a}} for q,a in faq]},
                    breadcrumb([("PacePlanner", BASE+"/"),("Pace charts", BASE+"/pace-chart/")])])
 os.makedirs("pace-chart", exist_ok=True); open("pace-chart/index.html","w").write(html); out.insert(0,"pace-chart/")
+
+# ---- Guides (one new guide per weekly run; add a dict to GUIDES in _src/guides.py) ----
+import sys; sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from guides import GUIDES
+for g in GUIDES:
+    gp = f"guides/{g['slug']}/"
+    faq_ld = {"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":q,"acceptedAnswer":{"@type":"Answer","text":a}} for q,a in g["faq"]]}
+    faq_html = '<section class="card"><h2>Common questions</h2>' + "".join(f"<h3>{q}</h3><p>{a}</p>" for q,a in g["faq"]) + "</section>"
+    others = [o for o in GUIDES if o is not g]
+    more = ('<section class="card"><h2>More running guides</h2><p>' + " · ".join(f'<a href="../{o["slug"]}/">{o["h1"]}</a>' for o in others) + ' · <a href="../../pace-chart/">Pace charts</a></p></section>') if others else ""
+    html = page(gp, g["title"], g["desc"], g["h1"], g["lead"], g["body"] + faq_html + more,
+                [faq_ld, breadcrumb([("PacePlanner", BASE+"/"),("Guides", BASE+"/guides/"),(g["h1"], BASE+"/"+gp)])])
+    os.makedirs(gp, exist_ok=True); open(gp+"index.html","w").write(html); out.append(gp)
+hub = '<section class="card"><h2>Running guides</h2><ul>' + "".join(f'<li><a href="{g["slug"]}/"><b>{g["h1"]}</b></a>: {g["desc"]}</li>' for g in GUIDES) + '</ul></section>'
+os.makedirs("guides", exist_ok=True)
+open("guides/index.html","w").write(page("guides/", "Running Guides: Pacing, Race Times & Training | PacePlanner",
+     "Free running guides on pacing, predicting race times and training for 5K to marathon.", "Running guides",
+     "Practical guides on pacing, race times and training.", hub, [breadcrumb([("PacePlanner", BASE+"/"),("Guides", BASE+"/guides/")])]))
+out.append("guides/")
 
 urls = ["", "plan/"] + out
 open("sitemap.xml","w").write('<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n' +
