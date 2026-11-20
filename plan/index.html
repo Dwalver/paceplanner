@@ -160,7 +160,8 @@ footer a{color:var(--muted)}
 // ---- Configuration (filled in once the Polar account exists) ----
 const CFG = {
   checkoutUrl: "https://buy.polar.sh/polar_cl_0LXsjlnS0M3zndJ2qWFGYxCahc70jeddCb0ZN0btcgl",          // Polar checkout link for the Pro unlock
-  polarOrgId: "9529c75f-b6d9-4ba4-b60e-3c5f86796307",           // Polar organization id (public)
+  polarOrgId: "9529c75f-b6d9-4ba4-b60e-3c5f86796307",
+  paymentsLive: false,      // set true once Polar approves the organization           // Polar organization id (public)
 };
 // -----------------------------------------------------------------
 const $ = id => document.getElementById(id);
@@ -423,7 +424,7 @@ $('k-go').addEventListener('click', async () => {
   $('k-go').disabled = false;
 });
 (async function initPro(){
-  if (CFG.checkoutUrl) $('buy').href = CFG.checkoutUrl; else { $('buy').textContent = "Pro unlock launching soon"; $('buy').removeAttribute('href'); $('buy').style.opacity=.6; }
+  if (CFG.checkoutUrl && CFG.paymentsLive) $('buy').href = CFG.checkoutUrl; else { $('buy').textContent = "Pro unlock launching soon"; $('buy').removeAttribute('href'); $('buy').style.opacity=.6; }
   const L = store.get(LIC_KEY);
   if (L && L.key){ setPro(true);
     if (Date.now() - (L.checked||0) > 14*DAY){ try { const ok = await validate(L.key); if (ok) store.set(LIC_KEY,{key:L.key,checked:Date.now()}); else { localStorage.removeItem(LIC_KEY); setPro(false); } } catch(e){} } }
