@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Race Time Predictor: 5K to 10K, Half & Marathon Times | PacePlanner</title>
+<meta name="description" content="Predict your 10K, half marathon and marathon time from a 5K or 10K result, with a free calculator and a 5K conversion chart.">
+<link rel="canonical" href="https://dwalver.github.io/paceplanner/guides/race-time-predictor/">
+<meta property="og:title" content="Race time predictor: convert your 5K time to 10K, half and marathon">
+<meta property="og:description" content="Predict your 10K, half marathon and marathon time from a 5K or 10K result, with a free calculator and a 5K conversion chart.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://dwalver.github.io/paceplanner/guides/race-time-predictor/">
+<meta property="og:site_name" content="PacePlanner">
+
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "What marathon time does a 25 minute 5K predict?", "acceptedAnswer": {"@type": "Answer", "text": "Riegel's formula predicts about 3:59:47 for the marathon and 1:55:00 for the half. Most runners without high mileage should expect a marathon 5 to 10 percent slower."}}, {"@type": "Question", "name": "What half marathon time does a 50 minute 10K predict?", "acceptedAnswer": {"@type": "Answer", "text": "About 1:50:19, which is 5:14 per kilometre."}}, {"@type": "Question", "name": "What is Riegel's formula?", "acceptedAnswer": {"@type": "Answer", "text": "It is a race time prediction published by Peter Riegel in 1977: T2 = T1 × (D2 / D1)^1.06. The exponent 1.06 reflects how much a runner slows down as the distance increases."}}, {"@type": "Question", "name": "Can I run a sub-4 marathon?", "acceptedAnswer": {"@type": "Answer", "text": "A 4:00:00 marathon roughly matches a 25:01 5K or a 1:55:07 half marathon by Riegel's formula, but you also need the endurance from several months of consistent training."}}]}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "PacePlanner", "item": "https://dwalver.github.io/paceplanner/"}, {"@type": "ListItem", "position": 2, "name": "Guides", "item": "https://dwalver.github.io/paceplanner/guides/"}, {"@type": "ListItem", "position": 3, "name": "Race time predictor: convert your 5K time to 10K, half and marathon", "item": "https://dwalver.github.io/paceplanner/guides/race-time-predictor/"}]}</script>
+<style>:root{--bg:#f6f8fb;--card:#fff;--ink:#1b2733;--muted:#5b6b7b;--brand:#1f3a5f;--accent:#f26b3a;--line:#dde4ec;--soft:#eef3f8}
+@media (prefers-color-scheme:dark){:root{--bg:#0f1720;--card:#17212c;--ink:#e6edf3;--muted:#9fb0c0;--brand:#8db4e2;--accent:#ff8a5c;--line:#2a3846;--soft:#1d2a37}}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
+header{background:var(--brand);color:#fff;padding:28px 16px 36px}@media (prefers-color-scheme:dark){header{background:#13263d}}
+.wrap{max-width:880px;margin:0 auto;padding:0 16px}header h1{margin:0 0 6px;font-size:clamp(1.6rem,4vw,2.2rem)}header p{margin:0;opacity:.9}
+nav{display:flex;gap:14px;flex-wrap:wrap;margin-top:14px;font-size:.95rem}nav a{color:#fff;opacity:.9}main{margin-top:-18px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:22px;margin:0 0 20px}
+h2{margin:0 0 8px;font-size:1.3rem;color:var(--brand)}h3{margin:16px 0 4px;font-size:1.05rem}a{color:var(--brand)}
+.tbl{overflow-x:auto}table{width:100%;border-collapse:collapse;font-size:.95rem;font-variant-numeric:tabular-nums}
+th,td{text-align:right;padding:7px 8px;border-bottom:1px solid var(--line);white-space:nowrap}th:first-child,td:first-child{text-align:left}
+th{color:var(--muted);font-weight:600;font-size:.85rem;position:sticky;top:0;background:var(--card)}tr:nth-child(even) td{background:var(--soft)}
+.btn{display:inline-block;background:var(--accent);color:#fff;text-decoration:none;padding:11px 18px;border-radius:9px;font-weight:600;margin:6px 8px 0 0}
+.btn.alt{background:var(--brand)}@media (prefers-color-scheme:dark){.btn.alt{color:#0f1720}}
+.cta{border:2px solid var(--accent)}footer{color:var(--muted);font-size:.85rem;text-align:center;padding:24px 16px 40px}</style>
+</head>
+<body>
+<header><div class="wrap">
+<h1>Race time predictor: convert your 5K time to 10K, half and marathon</h1>
+<p>Use one recent race to estimate what you can run at any other distance, and how much to trust the number.</p>
+<nav><a href="../../">Pace calculator</a><a href="../../plan/"><b>Free plan generator</b></a><a href="../../pace-chart/">Pace charts</a><a href="../../guides/">Guides</a><a href="../../pace-chart/5k/">5K</a><a href="../../pace-chart/10k/">10K</a><a href="../../pace-chart/half-marathon/">Half marathon</a><a href="../../pace-chart/marathon/">Marathon</a></nav>
+</div></header>
+<main class="wrap">
+<section class="card">
+<h2>Race time predictor</h2>
+<p>Enter a recent race result and the distance you want to predict.</p>
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;align-items:end">
+<label>Your race<br><select id="d1" style="width:100%;padding:8px"><option value="5">5K</option><option value="10">10K</option><option value="21.0975">Half marathon</option><option value="42.195">Marathon</option></select></label>
+<label>Your time (h:mm:ss or mm:ss)<br><input id="t1" value="25:00" style="width:100%;padding:8px"></label>
+<label>Predict<br><select id="d2" style="width:100%;padding:8px"><option value="5">5K</option><option value="10">10K</option><option value="21.0975" selected>Half marathon</option><option value="42.195">Marathon</option></select></label>
+</div>
+<p id="out" style="font-size:1.15rem;margin-top:14px"></p>
+<script>
+(function(){
+ const $=id=>document.getElementById(id);
+ const parse=s=>{const p=s.trim().split(':').map(Number);if(p.some(isNaN))return NaN;return p.reduce((a,b)=>a*60+b,0)};
+ const fmt=x=>{x=Math.round(x);const h=Math.floor(x/3600),m=Math.floor(x%3600/60),s=x%60;return (h?h+':'+String(m).padStart(2,'0'):m)+':'+String(s).padStart(2,'0')};
+ function go(){const t=parse($('t1').value),d1=+$('d1').value,d2=+$('d2').value;
+  if(!(t>0)){$('out').textContent='Enter a time like 25:00 or 1:52:30.';return}
+  const p=t*Math.pow(d2/d1,1.06);
+  $('out').innerHTML='Predicted time: <b>'+fmt(p)+'</b> &middot; pace '+fmt(p/d2)+' /km &middot; '+fmt(p/d2*1.609344)+' /mile';}
+ ['d1','t1','d2'].forEach(i=>$(i).addEventListener('input',go));go();
+})();
+</script>
+</section>
+<section class="card">
+<h2>5K to 10K, half marathon and marathon conversion chart</h2>
+<p>Predicted equivalent times for every 5K result from 17:00 to 40:00, using Riegel's formula (T2 = T1 × (D2 / D1)<sup>1.06</sup>). The last column is the marathon pace per kilometre.</p>
+<div class="tbl"><table><thead><tr><th>5K time</th><th>10K</th><th>Half marathon</th><th>Marathon</th><th>Marathon /km</th></tr></thead><tbody><tr><td><b>17:00</b></td><td>35:27</td><td>1:18:12</td><td>2:43:03</td><td>3:52</td></tr><tr><td><b>18:00</b></td><td>37:32</td><td>1:22:48</td><td>2:52:38</td><td>4:05</td></tr><tr><td><b>19:00</b></td><td>39:37</td><td>1:27:24</td><td>3:02:14</td><td>4:19</td></tr><tr><td><b>20:00</b></td><td>41:42</td><td>1:32:00</td><td>3:11:49</td><td>4:33</td></tr><tr><td><b>21:00</b></td><td>43:47</td><td>1:36:36</td><td>3:21:25</td><td>4:46</td></tr><tr><td><b>22:00</b></td><td>45:52</td><td>1:41:12</td><td>3:31:00</td><td>5:00</td></tr><tr><td><b>23:00</b></td><td>47:57</td><td>1:45:48</td><td>3:40:36</td><td>5:14</td></tr><tr><td><b>24:00</b></td><td>50:02</td><td>1:50:24</td><td>3:50:11</td><td>5:27</td></tr><tr><td><b>25:00</b></td><td>52:07</td><td>1:55:00</td><td>3:59:47</td><td>5:41</td></tr><tr><td><b>26:00</b></td><td>54:12</td><td>1:59:36</td><td>4:09:22</td><td>5:55</td></tr><tr><td><b>27:00</b></td><td>56:18</td><td>2:04:12</td><td>4:18:58</td><td>6:08</td></tr><tr><td><b>28:00</b></td><td>58:23</td><td>2:08:48</td><td>4:28:33</td><td>6:22</td></tr><tr><td><b>29:00</b></td><td>1:00:28</td><td>2:13:24</td><td>4:38:09</td><td>6:36</td></tr><tr><td><b>30:00</b></td><td>1:02:33</td><td>2:18:00</td><td>4:47:44</td><td>6:49</td></tr><tr><td><b>31:00</b></td><td>1:04:38</td><td>2:22:36</td><td>4:57:19</td><td>7:03</td></tr><tr><td><b>32:00</b></td><td>1:06:43</td><td>2:27:12</td><td>5:06:55</td><td>7:16</td></tr><tr><td><b>33:00</b></td><td>1:08:48</td><td>2:31:48</td><td>5:16:30</td><td>7:30</td></tr><tr><td><b>34:00</b></td><td>1:10:53</td><td>2:36:24</td><td>5:26:06</td><td>7:44</td></tr><tr><td><b>35:00</b></td><td>1:12:58</td><td>2:41:00</td><td>5:35:41</td><td>7:57</td></tr><tr><td><b>36:00</b></td><td>1:15:03</td><td>2:45:36</td><td>5:45:17</td><td>8:11</td></tr><tr><td><b>37:00</b></td><td>1:17:09</td><td>2:50:12</td><td>5:54:52</td><td>8:25</td></tr><tr><td><b>38:00</b></td><td>1:19:14</td><td>2:54:48</td><td>6:04:28</td><td>8:38</td></tr><tr><td><b>39:00</b></td><td>1:21:19</td><td>2:59:24</td><td>6:14:03</td><td>8:52</td></tr><tr><td><b>40:00</b></td><td>1:23:24</td><td>3:04:00</td><td>6:23:39</td><td>9:06</td></tr></tbody></table></div>
+</section>
+<section class="card">
+<h2>How accurate are race time predictions?</h2>
+<p>Riegel's formula works well between 5K and half marathon if you have trained for the longer distance. For the marathon it is usually optimistic: most recreational runners finish 5 to 10 percent slower than the prediction unless they have run 50+ km a week and long runs of 30 km or more.</p>
+<ul>
+<li><b>Use a recent result.</b> A race from the last 6 to 8 weeks, run flat out on a flat course.</li>
+<li><b>Predict from the closest distance.</b> A half marathon predicts a marathon far better than a 5K does.</li>
+<li><b>Treat the marathon number as a ceiling.</b> Start at the predicted pace plus 5 to 10 seconds per km and speed up after 30 km if you feel good.</li>
+</ul>
+</section>
+<section class="card cta">
+<h2>Got your goal time? Train for it</h2>
+<p>The free PacePlanner generator turns your race date and predicted time into a week-by-week plan with the target pace for every run. Prefer a spreadsheet? The Etsy plans fill in dates and paces automatically.</p>
+<a class="btn" href="../../plan/">Build my free plan</a><a class="btn alt" href="https://www.etsy.com/listing/4621577122" rel="noopener">Spreadsheet plans (5K to marathon)</a>
+<p style="margin-top:12px">Need the pace per km or mile for a time? See the <a href="../../pace-chart/">pace charts</a> or the <a href="../../">pace calculator</a>.</p>
+</section><section class="card"><h2>Common questions</h2><h3>What marathon time does a 25 minute 5K predict?</h3><p>Riegel's formula predicts about 3:59:47 for the marathon and 1:55:00 for the half. Most runners without high mileage should expect a marathon 5 to 10 percent slower.</p><h3>What half marathon time does a 50 minute 10K predict?</h3><p>About 1:50:19, which is 5:14 per kilometre.</p><h3>What is Riegel's formula?</h3><p>It is a race time prediction published by Peter Riegel in 1977: T2 = T1 × (D2 / D1)^1.06. The exponent 1.06 reflects how much a runner slows down as the distance increases.</p><h3>Can I run a sub-4 marathon?</h3><p>A 4:00:00 marathon roughly matches a 25:01 5K or a 1:55:07 half marathon by Riegel's formula, but you also need the endurance from several months of consistent training.</p></section>
+</main>
+<footer>© 2026 PacePlanner · <a href="../../">Running pace calculator</a> · <a href="../../plan/">Training plan generator</a></footer>
+</body>
+</html>
