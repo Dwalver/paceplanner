@@ -53,7 +53,7 @@ th{color:var(--muted);font-weight:600;font-size:.85rem;position:sticky;top:0;bac
 .btn.alt{background:var(--brand)}@media (prefers-color-scheme:dark){.btn.alt{color:#0f1720}}
 .cta{border:2px solid var(--accent)}footer{color:var(--muted);font-size:.85rem;text-align:center;padding:24px 16px 40px}"""
 
-def page(path, title, desc, h1, lead, body, jsonld):
+def page(path, title, desc, h1, lead, body, jsonld, img=None):
     url = f"{BASE}/{path}"
     depth = path.count("/")
     up = "../" * depth
@@ -74,6 +74,7 @@ def page(path, title, desc, h1, lead, body, jsonld):
 <meta property="og:type" content="article">
 <meta property="og:url" content="{url}">
 <meta property="og:site_name" content="PacePlanner">
+{f'<meta property="og:image" content="{BASE}/pins/{img}.jpg">' if img else ""}
 {ld}<style>{STYLE}</style>
 </head>
 <body>
@@ -115,6 +116,7 @@ for r in RACES:
         t += r["step"]
     heads = ["Finish time","Pace /km","Pace /mile","km/h"] + [f"{n} split" for _, n in r["splits"][2:]]
     table = "<div class=\"tbl\"><table><thead><tr>" + "".join(f"<th>{h}</th>" for h in heads) + "</tr></thead><tbody>" + "\n".join(rows) + "</tbody></table></div>"
+    pin = {"5k":"5k-pace-chart","half-marathon":"half-pace-chart","marathon":"marathon-pace-chart"}.get(r["slug"])
     faq_html = "".join(f"<h3>{q}</h3><p>{a}</p>" for q, a in r["faq"])
     faq_ld = {"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":q,"acceptedAnswer":{"@type":"Answer","text":a}} for q,a in r["faq"]]}
     body = f"""<section class="card">
@@ -127,11 +129,12 @@ for r in RACES:
 <h2>Common questions</h2>
 {faq_html}
 <p>See also: {' · '.join(f'<a href="../{o["slug"]}/">{o["name"]} pace chart</a>' for o in RACES if o is not r)}.</p>
-</section>"""
+</section>""" + (f"""
+<section class="card" style="text-align:center"><p>Save this chart for later:</p><img src="../../pins/{pin}.jpg" alt="{r['name']} pace chart: pace per km and mile for every finish time" width="333" height="500" loading="lazy" style="max-width:100%;height:auto;border-radius:10px"></section>""" if pin else "")
     html = page(path, f"{r['name']} Pace Chart: Pace per km & mile for Every Finish Time | PacePlanner",
                 f"{r['name']} pace chart with the pace per km and per mile for every finish time, plus split times. Free, printable and mobile friendly.",
                 f"{r['name']} pace chart", f"The pace per km and per mile for every {r['name'].lower()} finish time, with split times.",
-                body, [faq_ld, breadcrumb([("PacePlanner", BASE+"/"),("Pace charts", BASE+"/pace-chart/"),(r['name'], BASE+"/"+path)])])
+                body, [faq_ld, breadcrumb([("PacePlanner", BASE+"/"),("Pace charts", BASE+"/pace-chart/"),(r['name'], BASE+"/"+path)])], img=pin)
     os.makedirs(path, exist_ok=True); open(path+"index.html","w").write(html); out.append(path)
 
 # hub page: km <-> mile conversion
