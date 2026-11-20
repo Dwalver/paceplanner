@@ -1,0 +1,205 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Running Pace Calculator, Race Predictor & Training Paces | PacePlanner</title>
+<meta name="description" content="Free running pace calculator: convert time and distance to pace per km or mile, predict your 5K, 10K, half marathon and marathon times, and get your training paces.">
+<link rel="canonical" href="https://dwalver.github.io/paceplanner/">
+<meta property="og:title" content="Running Pace Calculator & Race Predictor">
+<meta property="og:description" content="Pace per km/mile, race time predictions and personal training paces. Free, no sign-up.">
+<meta property="og:type" content="website">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebApplication","name":"PacePlanner Running Pace Calculator","applicationCategory":"SportsApplication","operatingSystem":"Any","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}}
+</script>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[
+{"@type":"Question","name":"How do I calculate my running pace?","acceptedAnswer":{"@type":"Answer","text":"Divide your finish time by the distance. For example, 50:00 for 10 km is 5:00 per km, or about 8:03 per mile."}},
+{"@type":"Question","name":"How accurate are race time predictions?","acceptedAnswer":{"@type":"Answer","text":"The calculator uses the Riegel formula (T2 = T1 × (D2/D1)^1.06). It is usually accurate within a few percent for distances close to the one you raced, and tends to be optimistic for the marathon unless you have done the long-run training."}},
+{"@type":"Question","name":"How fast should my easy runs be?","acceptedAnswer":{"@type":"Answer","text":"Easy runs are typically 25–38% slower per km than your current 5K race pace. You should be able to hold a conversation."}}
+]}
+</script>
+<style>
+:root{--bg:#f6f8fb;--card:#fff;--ink:#1b2733;--muted:#5b6b7b;--brand:#1f3a5f;--accent:#f26b3a;--line:#dde4ec;--soft:#eef3f8}
+@media (prefers-color-scheme:dark){:root{--bg:#0f1720;--card:#17212c;--ink:#e6edf3;--muted:#9fb0c0;--brand:#8db4e2;--accent:#ff8a5c;--line:#2a3846;--soft:#1d2a37}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
+header{background:var(--brand);color:#fff;padding:28px 16px 36px}
+@media (prefers-color-scheme:dark){header{background:#13263d}}
+.wrap{max-width:880px;margin:0 auto;padding:0 16px}
+header h1{margin:0 0 6px;font-size:clamp(1.6rem,4vw,2.2rem)}
+header p{margin:0;opacity:.9}
+nav{display:flex;gap:14px;flex-wrap:wrap;margin-top:14px;font-size:.95rem}
+nav a{color:#fff;opacity:.9}
+main{margin-top:-18px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:22px;margin:0 0 20px}
+h2{margin:0 0 4px;font-size:1.3rem;color:var(--brand)}
+.sub{color:var(--muted);margin:0 0 16px;font-size:.95rem}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px}
+label{display:block;font-size:.85rem;color:var(--muted);margin-bottom:4px}
+input,select{width:100%;padding:10px 12px;border:1px solid var(--line);border-radius:9px;background:var(--bg);color:var(--ink);font-size:1rem}
+.row{display:flex;gap:6px}
+.row input{text-align:center}
+button{background:var(--accent);color:#fff;border:0;border-radius:9px;padding:11px 18px;font-weight:600;font-size:1rem;cursor:pointer;margin-top:14px}
+.out{margin-top:16px;padding:14px 16px;background:var(--soft);border-radius:10px;font-size:1.05rem;min-height:1.5em}
+.out b{color:var(--brand)}
+table{width:100%;border-collapse:collapse;margin-top:12px;font-size:.95rem}
+th,td{text-align:left;padding:8px 6px;border-bottom:1px solid var(--line)}
+td b{white-space:nowrap}
+th{color:var(--muted);font-weight:600;font-size:.85rem}
+.cta{border:2px solid var(--accent)}
+.plans{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px;margin-top:10px}
+.plan{border:1px solid var(--line);border-radius:12px;padding:14px;display:flex;flex-direction:column}
+.plan h3{margin:0 0 4px;font-size:1.05rem}
+.plan p{margin:0 0 10px;color:var(--muted);font-size:.9rem;flex:1}
+.plan a{display:inline-block;text-align:center;background:var(--brand);color:#fff;text-decoration:none;padding:9px;border-radius:8px;font-weight:600}
+@media (prefers-color-scheme:dark){.plan a{color:#0f1720}}
+.plan.best{border-color:var(--accent)}
+.plan.best a{background:var(--accent);color:#fff}
+details{border-bottom:1px solid var(--line);padding:10px 0}
+summary{cursor:pointer;font-weight:600}
+footer{color:var(--muted);font-size:.85rem;text-align:center;padding:24px 16px 40px}
+</style>
+</head>
+<body>
+<header><div class="wrap">
+<h1>Running Pace Calculator</h1>
+<p>Pace per km or mile, race time predictions and your personal training paces. Free, no sign-up.</p>
+<nav><a href="#pace">Pace</a><a href="#predict">Race predictor</a><a href="#zones">Training paces</a><a href="#plans">Training plans</a><a href="#faq">FAQ</a></nav>
+</div></header>
+
+<main class="wrap">
+
+<section class="card" id="pace">
+<h2>Pace calculator</h2>
+<p class="sub">Fill in any two of distance, time and pace. Leave the one you want calculated empty.</p>
+<div class="grid">
+ <div><label for="p-dist">Distance</label>
+  <select id="p-preset"><option value="">Custom…</option><option value="5">5K</option><option value="10">10K</option><option value="21.0975">Half marathon</option><option value="42.195">Marathon</option></select></div>
+ <div><label for="p-dist">Custom distance</label><input id="p-dist" inputmode="decimal" placeholder="e.g. 10"></div>
+ <div><label for="p-unit">Unit</label><select id="p-unit"><option value="km">km</option><option value="mi">miles</option></select></div>
+</div>
+<div class="grid" style="margin-top:12px">
+ <div><label>Time (h : m : s)</label><div class="row"><input id="p-h" inputmode="numeric" placeholder="h"><input id="p-m" inputmode="numeric" placeholder="m"><input id="p-s" inputmode="numeric" placeholder="s"></div></div>
+ <div><label>Pace (min : s per unit)</label><div class="row"><input id="p-pm" inputmode="numeric" placeholder="min"><input id="p-ps" inputmode="numeric" placeholder="s"></div></div>
+</div>
+<button id="p-go">Calculate</button>
+<div class="out" id="p-out" aria-live="polite"></div>
+</section>
+
+<section class="card" id="predict">
+<h2>Race time predictor</h2>
+<p class="sub">Enter a recent race result to estimate what you could run at other distances.</p>
+<div class="grid">
+ <div><label for="r-dist">Recent race</label><select id="r-dist"><option value="5">5K</option><option value="10" selected>10K</option><option value="21.0975">Half marathon</option><option value="42.195">Marathon</option></select></div>
+ <div><label>Finish time (h : m : s)</label><div class="row"><input id="r-h" inputmode="numeric" placeholder="h" value="0"><input id="r-m" inputmode="numeric" placeholder="m" value="50"><input id="r-s" inputmode="numeric" placeholder="s" value="0"></div></div>
+</div>
+<button id="r-go">Predict</button>
+<div id="r-out"></div>
+</section>
+
+<section class="card" id="zones">
+<h2>Training pace calculator</h2>
+<p class="sub">Enter your goal race and time to see the paces to train at.</p>
+<div class="grid">
+ <div><label for="z-dist">Goal race</label><select id="z-dist"><option value="5">5K</option><option value="10">10K</option><option value="21.0975">Half marathon</option><option value="42.195" selected>Marathon</option></select></div>
+ <div><label>Goal time (h : m : s)</label><div class="row"><input id="z-h" inputmode="numeric" value="3"><input id="z-m" inputmode="numeric" value="45"><input id="z-s" inputmode="numeric" value="0"></div></div>
+ <div><label for="z-unit">Unit</label><select id="z-unit"><option value="km">per km</option><option value="mi">per mile</option></select></div>
+</div>
+<button id="z-go">Show my paces</button>
+<div id="z-out"></div>
+<div class="out" id="z-cta" style="display:none"></div>
+</section>
+
+<section class="card cta" id="plans">
+<h2>Training plans that fill in your paces for you</h2>
+<p class="sub">Spreadsheet plans for Excel and Google Sheets. Enter your race date and goal time once: every session gets a date, a distance and a target pace. Tick off runs and watch your weekly mileage chart grow. Works in km or miles.</p>
+<div class="plans">
+ <div class="plan"><h3>5K · 8 weeks</h3><p>Get faster over 5K with 5 runs a week.</p><a data-plan="5k" href="#">Get the plan</a></div>
+ <div class="plan"><h3>10K · 10 weeks</h3><p>Intervals, tempo and 10K-pace work.</p><a data-plan="10k" href="#">Get the plan</a></div>
+ <div class="plan"><h3>Half marathon · 12 weeks</h3><p>Long runs up to 18 km, race simulation and taper.</p><a data-plan="half" href="#">Get the plan</a></div>
+ <div class="plan"><h3>Marathon · 16 weeks</h3><p>Long runs up to 32 km, marathon-pace work, 3-week taper.</p><a data-plan="marathon" href="#">Get the plan</a></div>
+ <div class="plan best"><h3>All 4 plans</h3><p>The whole bundle at a discount. Train for every distance.</p><a data-plan="bundle" href="#">Get the bundle</a></div>
+</div>
+</section>
+
+<section class="card" id="faq">
+<h2>FAQ</h2>
+<details><summary>How do I calculate my running pace?</summary><p>Divide your finish time by the distance. 50:00 for 10 km is 5:00 per km, or about 8:03 per mile.</p></details>
+<details><summary>How accurate is the race predictor?</summary><p>It uses the Riegel formula, T2 = T1 × (D2 / D1)<sup>1.06</sup>. It is usually within a few percent for nearby distances. Marathon predictions from short races assume you have done the long-run training, so treat them as a best case.</p></details>
+<details><summary>How fast should my easy runs be?</summary><p>Roughly 25–38% slower per km than your current 5K race pace. If you can't hold a conversation, slow down. Most runners run their easy days too fast.</p></details>
+<details><summary>What is threshold or tempo pace?</summary><p>A comfortably hard pace you could hold for about an hour in a race. Training there raises the speed you can sustain before fatigue builds up quickly.</p></details>
+<details><summary>How many km is a half marathon and a marathon?</summary><p>A half marathon is 21.0975 km (13.1 miles). A marathon is 42.195 km (26.2 miles).</p></details>
+</section>
+
+</main>
+<footer>© <span id="yr"></span> PacePlanner · Calculations are estimates, not medical advice.</footer>
+
+<script>
+// Fill in with real checkout links once the shop is live.
+const PLAN_LINKS = {"5k":"", "10k":"", "half":"", "marathon":"", "bundle":""};
+
+const $ = id => document.getElementById(id);
+const num = v => { const n = parseFloat(String(v).replace(',', '.')); return isNaN(n) ? 0 : n; };
+const KM_PER_MI = 1.609344;
+function fmt(sec, forceH){ sec = Math.round(sec); const h=Math.floor(sec/3600), m=Math.floor(sec%3600/60), s=sec%60;
+  const ss=String(s).padStart(2,'0'); return (h||forceH) ? `${h}:${String(m).padStart(2,'0')}:${ss}` : `${m}:${ss}`; }
+const riegel = (t, d1, d2) => t * Math.pow(d2/d1, 1.06);
+
+$('yr').textContent = new Date().getFullYear();
+document.querySelectorAll('[data-plan]').forEach(a => {
+  const url = PLAN_LINKS[a.dataset.plan];
+  if (url) { a.href = url; a.target = '_blank'; a.rel = 'noopener'; }
+  else { a.textContent = 'Coming soon'; a.removeAttribute('href'); a.style.opacity = .6; }
+});
+
+$('p-preset').addEventListener('change', e => { if (e.target.value) { $('p-unit').value='km'; $('p-dist').value = e.target.value; } });
+$('p-go').addEventListener('click', () => {
+  const unit = $('p-unit').value, dist = num($('p-dist').value);
+  const t = num($('p-h').value)*3600 + num($('p-m').value)*60 + num($('p-s').value);
+  const p = num($('p-pm').value)*60 + num($('p-ps').value);
+  const other = unit==='km' ? 'mi' : 'km', conv = unit==='km' ? KM_PER_MI : 1/KM_PER_MI;
+  let msg;
+  if (dist && t) { const pace=t/dist; msg = `Pace: <b>${fmt(pace)} /${unit}</b> · ${fmt(pace*conv)} /${other} · ${(dist/(t/3600)).toFixed(2)} ${unit}/h`; }
+  else if (dist && p) { msg = `Finish time: <b>${fmt(p*dist, true)}</b>`; }
+  else if (t && p) { msg = `Distance: <b>${(t/p).toFixed(2)} ${unit}</b>`; }
+  else msg = 'Fill in two of the three fields.';
+  $('p-out').innerHTML = msg;
+});
+
+$('r-go').addEventListener('click', () => {
+  const d1 = num($('r-dist').value), t = num($('r-h').value)*3600 + num($('r-m').value)*60 + num($('r-s').value);
+  if (!t) { $('r-out').innerHTML = '<div class="out">Enter your finish time.</div>'; return; }
+  const races = [["5K",5],["10K",10],["Half marathon",21.0975],["Marathon",42.195]];
+  $('r-out').innerHTML = '<table><tr><th>Race</th><th>Predicted time</th><th>Pace /km</th><th>Pace /mi</th></tr>' +
+    races.map(([n,d]) => { const tt = riegel(t,d1,d); return `<tr><td>${n}</td><td><b>${fmt(tt,true)}</b></td><td>${fmt(tt/d)}</td><td>${fmt(tt/d*KM_PER_MI)}</td></tr>`; }).join('') + '</table>';
+});
+
+const ZONES = [ // name, fast, slow factor of 5K pace (or special)
+  ["Easy", 1.25, 1.38, "Most of your running. Conversational."],
+  ["Long run", 1.22, 1.32, "Steady endurance runs."],
+  ["Marathon pace", "M", "M", "Predicted marathon pace."],
+  ["Half-marathon pace", "H", "H", "Predicted half-marathon pace."],
+  ["Threshold / tempo", 1.06, 1.09, "Comfortably hard, ~1 hour race effort."],
+  ["Interval (VO2max)", 0.98, 1.02, "Hard reps of 2–5 minutes."],
+  ["Repetition / speed", 0.93, 0.97, "Short fast reps, full recovery."],
+];
+const PLAN_FOR = {5:"5k", 10:"10k", 21.0975:"half", 42.195:"marathon"};
+const PLAN_NAME = {5:"8-week 5K plan", 10:"10-week 10K plan", 21.0975:"12-week half marathon plan", 42.195:"16-week marathon plan"};
+$('z-go').addEventListener('click', () => {
+  const d = num($('z-dist').value), unit = $('z-unit').value, f = unit==='mi' ? KM_PER_MI : 1;
+  const t = num($('z-h').value)*3600 + num($('z-m').value)*60 + num($('z-s').value);
+  if (!t) return;
+  const p5 = riegel(t,d,5)/5;
+  const pace = x => x==="M" ? riegel(t,d,42.195)/42.195 : x==="H" ? riegel(t,d,21.0975)/21.0975 : p5*x;
+  $('z-out').innerHTML = `<table><tr><th>Zone</th><th>Pace /${unit}</th><th>What it's for</th></tr>` +
+    ZONES.map(([n,a,b,w]) => { const pa=fmt(pace(a)*f), pb=fmt(pace(b)*f); return `<tr><td>${n}</td><td><b>${pa===pb?pa:pa+' – '+pb}</b></td><td>${w}</td></tr>`; }).join('') +
+    `<tr><td>Goal race pace</td><td><b>${fmt(t/d*f)}</b></td><td>Your target on race day.</td></tr></table>`;
+  const link = PLAN_LINKS[PLAN_FOR[d]];
+  $('z-cta').style.display = 'block';
+  $('z-cta').innerHTML = `Want every session laid out with these paces and real dates? The <b>${PLAN_NAME[d]}</b> spreadsheet does it automatically. ` +
+    (link ? `<a href="${link}" target="_blank" rel="noopener">Get it here →</a>` : `<a href="#plans">See the plans →</a>`);
+});
+</script>
+</body>
+</html>
