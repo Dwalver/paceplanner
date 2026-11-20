@@ -1,2 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"><url><loc>https://dwalver.github.io/paceplanner/</loc></url><url><loc>https://dwalver.github.io/paceplanner/plan/</loc></url></urlset>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url><loc>https://dwalver.github.io/paceplanner/</loc><lastmod>2026-11-20</lastmod></url>
+  <url><loc>https://dwalver.github.io/paceplanner/plan/</loc><lastmod>2026-11-20</lastmod></url>
+  <url><loc>https://dwalver.github.io/paceplanner/pace-chart/</loc><lastmod>2026-11-20</lastmod></url>
+  <url><loc>https://dwalver.github.io/paceplanner/pace-chart/5k/</loc><lastmod>2026-11-20</lastmod></url>
+  <url><loc>https://dwalver.github.io/paceplanner/pace-chart/10k/</loc><lastmod>2026-11-20</lastmod></url>
+  <url><loc>https://dwalver.github.io/paceplanner/pace-chart/half-marathon/</loc><lastmod>2026-11-20</lastmod></url>
+  <url><loc>https://dwalver.github.io/paceplanner/pace-chart/marathon/</loc><lastmod>2026-11-20</lastmod></url>
+</urlset>
