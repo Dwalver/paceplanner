@@ -180,7 +180,8 @@ for g in GUIDES:
     html = page(gp, g["title"], g["desc"], g["h1"], g["lead"], g["body"] + faq_html + more,
                 [faq_ld, breadcrumb([("PacePlanner", BASE+"/"),("Guides", BASE+"/guides/"),(g["h1"], BASE+"/"+gp)])])
     os.makedirs(gp, exist_ok=True); open(gp+"index.html","w").write(html); out.append(gp)
-hub = '<section class="card"><h2>Running guides</h2><ul>' + "".join(f'<li><a href="{g["slug"]}/"><b>{g["h1"]}</b></a>: {g["desc"]}</li>' for g in GUIDES) + '</ul></section>'
+hub = '<section class="card"><h2>Running guides</h2><ul>' + "".join(f'<li><a href="{g["slug"]}/"><b>{g["h1"]}</b></a>: {g["desc"]}</li>' for g in GUIDES) + '</ul></section>' + ('<section class="card"><h2>Ready-made training plans</h2><p>Spreadsheet plans that set every date from your race day and every pace from your goal time. Work in Excel, Google Sheets and Numbers.</p>'
+       '<a class="btn" href="../plan/">Build a free plan</a> <a class="btn alt" href="https://www.etsy.com/listing/4621577122" rel="noopener">5K to marathon bundle</a> <a class="btn alt" href="https://www.etsy.com/listing/4621709420" rel="noopener">Beginner bundle</a> <a class="btn alt" href="https://www.etsy.com/listing/4621708916" rel="noopener">Running log 2027</a></section>')
 os.makedirs("guides", exist_ok=True)
 open("guides/index.html","w").write(page("guides/", "Running Guides: Pacing, Race Times & Training | PacePlanner",
      "Free running guides on pacing, predicting race times and training for 5K to marathon.", "Running guides",
